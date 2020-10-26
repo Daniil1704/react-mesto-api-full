@@ -12,6 +12,17 @@ const getUsers = (req, res, next) => {
   .catch(next);
 };
 
+const getUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundErr({ message: 'Такого пользователя нет' });
+      }
+      res.send(user);
+    })
+    .catch(next);
+};
+
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
@@ -100,4 +111,5 @@ module.exports = {
   buildUser,
   changeUser,
   changeAvatar,
+  getUser
 };
