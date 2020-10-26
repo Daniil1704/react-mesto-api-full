@@ -12,17 +12,19 @@ const {
 
 router.get('/users', getUsers);
 
+router.get('/users/me', celebrate({
+  headers: Joi.object().keys({
+    authorization: Joi.string().required(),
+  }).unknown(true),
+}), getUser);
+
 router.get('/users/:userId', celebrate({
   params: Joi.object().keys({
     userId: Joi.string().required().length(24).hex(),
   }),
 }), getUserById);
 
-router.get('/users/me', celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
-}), getUser);
+
 
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({
