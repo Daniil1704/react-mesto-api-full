@@ -49,9 +49,9 @@ const buildUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt.hash(password, 10)
   .then((hash) => User.create({
-    name: name || "Введите имя",
-    about: about || "О себе",
-    avatar: avatar || "здесь какой-нибудь аватар по умолчанию",
+    name: name,
+    about: about,
+    avatar: avatar,
     email,
     password: hash,
   }))
