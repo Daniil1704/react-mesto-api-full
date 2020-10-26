@@ -3,11 +3,13 @@ const AuthorizationErr = require('../errors/AuthorizationErr');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-// при успешной авторизации записываем токен
 module.exports = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    throw new AuthorizationErr({ message: 'Что-то не так с авторизацией' });
+  }
+  const token = authorization.replace('Bearer ', '');
   let payload;
-
   try {
     payload = jwt.verify(
       token,
@@ -16,7 +18,6 @@ module.exports = (req, res, next) => {
   } catch (err) {
     throw new AuthorizationErr({ message: 'Что-то не так с авторизацией' });
   }
-
   req.user = payload;
   next();
 };
