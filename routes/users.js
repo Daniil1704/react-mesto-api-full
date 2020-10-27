@@ -7,7 +7,7 @@ const {
   getUserById,
   changeUser,
   changeAvatar,
-  getUser
+  getUser,
 } = require('../controllers/users.js');
 
 router.get('/users', getUsers);
@@ -23,8 +23,6 @@ router.get('/users/:userId', celebrate({
     userId: Joi.string().required().length(24).hex(),
   }),
 }), getUserById);
-
-
 
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({

@@ -4,15 +4,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const uRouters = require('./routes/users.js');
-const cRouters = require('./routes/cards.js');
 const { celebrate, Joi, errors } = require('celebrate');
 const requestLimit = require('express-rate-limit');
+const uRouters = require('./routes/users.js');
+const cRouters = require('./routes/cards.js');
 const error = require('./routes/error.js');
 const { requestLogger, errorLogger } = require('./middlewares/logger.js');
 const { login, buildUser } = require('./controllers/users.js');
 const auth = require('./middlewares/auth.js');
 const { validatorLink } = require('./middlewares/validate.js');
+
 const { PORT = 3000 } = process.env;
 const app = express();
 
