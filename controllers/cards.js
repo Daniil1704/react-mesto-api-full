@@ -8,17 +8,26 @@ const getCards = (req, res, next) => {
     .then((cards) => res.status(200).send(cards))
     .catch(next);
 };
-
+const buildCard = (req, res, next) => {
+  const { name, link } = req.body;
+  Card.create({ name, link, owner: req.user._id })
+    .then((card) => res.status(201).send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestErr({ message: 'Переданы не корректные данные' });
+      } else next(err);
+    });
+};
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
-    .orFail(() => new NotFoundErr({ message:'Карточка не найдена'}))
+    .orFail(() => new NotFoundErr({ message: 'Карточка не найдена' }))
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenErr({ message: 'Удалять можно только свои карточки'});
+        throw new ForbiddenErr({ message: 'Удалять можно только свои карточки' });
       }
       Card.findByIdAndDelete(req.params.cardId)
-        .then(() => res.status(200).send({ message:'Карточка удалена'}))
+        .then(() => res.status(200).send({ message: 'Карточка удалена' }))
         .catch(next);
     })
     .catch(next);
@@ -31,12 +40,12 @@ const like = (req, res, next) => {
     { new: true },
   )
 
-  .orFail(() => new NotFoundErr({ message:'Карточка не существует'}))
+    .orFail(() => new NotFoundErr({ message: 'Карточка не существует' }))
 
-  .then((likes) => {
+    .then((likes) => {
       res.status(200).send(likes);
-  })
-  .catch(next);
+    })
+    .catch(next);
 };
 
 const deleteLike = (req, res, next) => {
@@ -45,7 +54,7 @@ const deleteLike = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => new NotFoundErr({ message:'Карточка не существует'}))
+    .orFail(() => new NotFoundErr({ message: 'Карточка не существует' }))
     .then((likes) => {
       res.status(200).send(likes);
     })
