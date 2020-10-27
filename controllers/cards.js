@@ -12,13 +12,13 @@ const getCards = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
-    .orFail(() => new NotFoundErr('Карточка не найдена'))
+    .orFail(() => new NotFoundErr({ message:'Карточка не найдена'}))
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenErr( 'Удалять можно только свои карточки');
+        throw new ForbiddenErr({ message: 'Удалять можно только свои карточки'});
       }
       Card.findByIdAndDelete(req.params.cardId)
-        .then(() => res.status(200).send('Карточка удалена'))
+        .then(() => res.status(200).send({ message:'Карточка удалена'}))
         .catch(next);
     })
     .catch(next);
@@ -31,7 +31,7 @@ const like = (req, res, next) => {
     { new: true },
   )
 
-  .orFail(() => new NotFoundErr('Карточка не существует'))
+  .orFail(() => new NotFoundErr({ message:'Карточка не существует'}))
 
   .then((likes) => {
       res.status(200).send(likes);
@@ -45,7 +45,7 @@ const deleteLike = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => new NotFoundErr('Карточка не существует'))
+    .orFail(() => new NotFoundErr({ message:'Карточка не существует'}))
     .then((likes) => {
       res.status(200).send(likes);
     })

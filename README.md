@@ -14,6 +14,6 @@
 `npm run dev` — запускает сервер с hot-reload
 ***
 ## Сылки
-Доменное имя front-end http://www.tsyr.students.nomoreparties.co
-Доменное имя back-end http://www.api.tsyr.students.nomoreparties.co
-Публичный IP-адрес: 178.154.231.98
+<li>Доменное имя front-end https://www.tsyr.students.nomoreparties.co
+<li>Доменное имя back-end http://www.api.tsyr.students.nomoreparties.co
+<li>Публичный IP-адрес: 178.154.231.98
